@@ -76,9 +76,9 @@ each name group. Then we extract the top 100 female names by the number
 of births and store them in a new data frame `tbl_names_top_100_female`.
 
 ``` r
-tbl_names_top_100_female <- tbl_names |> 
+tbl_names_top_100_male <- tbl_names |> 
   # Keep ONLY Female names
-  filter(sex == "F") |> 
+  filter(sex == "M") |> 
   # Group by name
   group_by(name) |> 
   # Summarize the total number of births by group
@@ -86,20 +86,20 @@ tbl_names_top_100_female <- tbl_names |>
   # Slice the top 100 names by number of births
   slice_max(nb_births, n = 100) 
 
-tbl_names_top_100_female
+tbl_names_top_100_male
 #> # A tibble: 100 × 2
-#>    name      nb_births
-#>    <chr>         <dbl>
-#>  1 Mary        4132497
-#>  2 Elizabeth   1661030
-#>  3 Patricia    1572795
-#>  4 Jennifer    1469379
-#>  5 Linda       1453755
-#>  6 Barbara     1435386
-#>  7 Margaret    1255686
-#>  8 Susan       1122518
-#>  9 Dorothy     1109423
-#> 10 Sarah       1087196
+#>    name    nb_births
+#>    <chr>       <dbl>
+#>  1 James     5202714
+#>  2 John      5150510
+#>  3 Robert    4834094
+#>  4 Michael   4392696
+#>  5 William   4156142
+#>  6 David     3646903
+#>  7 Joseph    2639396
+#>  8 Richard   2571082
+#>  9 Charles   2411608
+#> 10 Thomas    2331794
 #> # ℹ 90 more rows
 ```
 
@@ -138,9 +138,9 @@ we want to add the rank for each name based on the number of births in
 that year. This will be very handy when we create the animated barchart.
 
 ``` r
-tbl_names_top_100_female_trends <- tbl_names |> 
+tbl_names_top_100_male_trends <- tbl_names |> 
   # Keep ONLY female names in the top 100
-  filter(name %in% tbl_names_top_100_female$name) |> 
+  filter(name %in% tbl_names_top_100_male$name) |> 
   # Group by year
   group_by(year) |> 
   # Add dense rank for number of births in descending order
@@ -148,21 +148,21 @@ tbl_names_top_100_female_trends <- tbl_names |>
   # Keep ONLY rows that are in the top 20 ranks
   filter(rank <= 20)
 
-tbl_names_top_100_female_trends
+tbl_names_top_100_male_trends
 #> # A tibble: 2,843 × 5
 #> # Groups:   year [142]
-#>     year name      sex   nb_births  rank
-#>    <dbl> <chr>     <chr>     <dbl> <int>
-#>  1  1880 Mary      F          7065     1
-#>  2  1880 Anna      F          2604     2
-#>  3  1880 Emma      F          2003     3
-#>  4  1880 Elizabeth F          1939     4
-#>  5  1880 Margaret  F          1578     5
-#>  6  1880 Alice     F          1414     6
-#>  7  1880 Sarah     F          1288     7
-#>  8  1880 Martha    F          1040     8
-#>  9  1880 Laura     F          1012     9
-#> 10  1880 Grace     F           982    10
+#>     year name    sex   nb_births  rank
+#>    <dbl> <chr>   <chr>     <dbl> <int>
+#>  1  1880 John    M          9655     1
+#>  2  1880 William M          9532     2
+#>  3  1880 James   M          5927     3
+#>  4  1880 Charles M          5348     4
+#>  5  1880 George  M          5126     5
+#>  6  1880 Frank   M          3242     6
+#>  7  1880 Joseph  M          2632     7
+#>  8  1880 Thomas  M          2534     8
+#>  9  1880 Henry   M          2444     9
+#> 10  1880 Robert  M          2415    10
 #> # ℹ 2,833 more rows
 ```
 
@@ -210,9 +210,9 @@ animation is created using the `gganimate` package, and the `dplyr` and
 respectively.
 
 ``` r
-anim <- tbl_names_top_100_female_trends |> 
+anim <- tbl_names_top_100_male_trends |> 
   # Filter for rows after the year 2000
-  filter(year > 2000) |> 
+  filter(year > 2010 & year < 2021) |> 
   # Create a column plot of rank vs. nb_births
   ggplot(aes(x = nb_births, y = fct_rev(factor(rank)))) +
   geom_col(aes(fill = name), show.legend = FALSE) +
@@ -226,7 +226,7 @@ anim <- tbl_names_top_100_female_trends |>
   facet_null() +
   aes(group = name) +
   labs(
-    title = 'Animated Barchart of Top Female Babynames',
+    title = 'Animated Barchart of Top Male Babynames',
     x = '# Births',
     y = NULL
   ) +
@@ -243,7 +243,7 @@ anim <- tbl_names_top_100_female_trends |>
 gganimate::animate(anim, fps = 5, width = 600, height = 800)
 ```
 
-<img src="https://i.imgur.com/9aWmyES.gif" width="100%" style="display: block; margin: auto;" />
+<img src="img/visualize-data-1.gif" width="100%" style="display: block; margin: auto;" />
 
 Here’s what the code does step by step:
 
