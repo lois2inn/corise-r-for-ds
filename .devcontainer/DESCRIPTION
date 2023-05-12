@@ -12,9 +12,13 @@ Imports:
     here,
     hexbin,
     Hmisc,
+    janitor,
     leaflet,
     markdown,
     plotly,
     shiny,
+    svglite,
     statebins,
-    xaringanthemer
+    xaringanExtra,
+    xaringanthemer,
+    zoo
