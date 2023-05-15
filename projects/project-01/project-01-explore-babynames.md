@@ -233,7 +233,7 @@ plot_trends_in_name <- function(my_name) {
     # Initialize a ggplot of `nb_births` vs. `year` colored by `sex`
     ggplot(aes(x = nb_births, y = year, color = sex)) +
     # Add a line layer
-    geom_smooth(method = "lm") +
+    geom_line() +
     # Add labels (title, x, y)
     labs(
       title = glue::glue("Babies named {my_name} across the years!"),
@@ -246,15 +246,11 @@ plot_trends_in_name <- function(my_name) {
 plot_trends_in_name("Steve")
 ```
 
-    #> `geom_smooth()` using formula = 'y ~ x'
-
 <img src="img/question-2-visualize-1.png" width="100%" style="display: block; margin: auto;" />
 
 ``` r
 plot_trends_in_name("Barbara")
 ```
-
-    #> `geom_smooth()` using formula = 'y ~ x'
 
 <img src="img/question-2-visualize-2.png" width="100%" style="display: block; margin: auto;" />
 
@@ -388,7 +384,7 @@ plot_trends_in_letter <- function(my_letter) {
     # Initialize a ggplot of pct_births vs. year colored by sex
     ggplot(aes(x = year, y = pct_births, color = sex)) +
     # Add a line layer
-    geom_smooth(method = "lm") +
+    geom_line() +
     # Add labels (title, subtitle, caption, x, y)
     labs(
       title = glue::glue("Trends in Names beginning with {my_letter}"),
@@ -405,8 +401,6 @@ plot_trends_in_letter <- function(my_letter) {
 
 plot_trends_in_letter("S")
 ```
-
-    #> `geom_smooth()` using formula = 'y ~ x'
 
 <img src="img/question-3-visualize-2-1.png" width="100%" style="display: block; margin: auto;" />
 
