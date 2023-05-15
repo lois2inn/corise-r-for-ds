@@ -177,7 +177,7 @@ plot_trends_in_name <- function(my_name) {
     # Initialize a ggplot of `nb_births` vs. `year` colored by `sex`
     ggplot(aes(x = nb_births, y = year, color = sex)) +
     # Add a line layer
-    geom_smooth(method = "lm") +
+    geom_line() +
     # Add labels (title, x, y)
     labs(
       title = glue::glue("Babies named {my_name} across the years!"),
@@ -279,7 +279,7 @@ plot_trends_in_letter <- function(my_letter) {
     # Initialize a ggplot of pct_births vs. year colored by sex
     ggplot(aes(x = year, y = pct_births, color = sex)) +
     # Add a line layer
-    geom_smooth(method = "lm") +
+    geom_line() +
     # Add labels (title, subtitle, caption, x, y)
     labs(
       title = glue::glue("Trends in Names beginning with {my_letter}"),
