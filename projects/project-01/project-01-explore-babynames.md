@@ -638,11 +638,11 @@ tbl_names_vowel_consonant |>
   facet_wrap(~ sex, scales = "free_y") +
   # Add labels (title, subtitle, caption, x, y)
   labs(
-      title = "Trends in combinations between Consonants and Vowels",
-      subtitle = "between first and last letter",
+      title = "Trends in combinations featuring Consonants and Vowels in first and last letters of baby names",
+      subtitle = "Girl names have more Consonant-Vowel combinations while boy baby names have Consonant - Consonant combination",
       caption = "Source: SSA",
       x = "Year",
-      y = '% births'
+      y = '% Births'
     ) +
   # Clean up x and y axis scales
   scale_x_continuous(
