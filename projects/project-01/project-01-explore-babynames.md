@@ -231,14 +231,14 @@ plot_trends_in_name <- function(my_name) {
     # Filter for name = my_name
     filter(name == my_name) |> 
     # Initialize a ggplot of `nb_births` vs. `year` colored by `sex`
-    ggplot(aes(x = nb_births, y = year, color = sex)) +
+    ggplot(aes(x = year, y = nb_births, color = sex)) +
     # Add a line layer
     geom_line() +
     # Add labels (title, x, y)
     labs(
       title = glue::glue("Babies named {my_name} across the years!"),
-      x = 'Births',
-      y = 'Year'
+      x = 'Year',
+      y = 'Births'
     ) +
     # Update plot theme
     theme(plot.title.position = "plot")
@@ -354,7 +354,7 @@ tbl_names_by_letter |>
   labs(
     title = 'Distribution of births by first letter and gender (for 2020).',
     subtitle = 'A and J are most popular first letters for girl and boy names respectively.',
-    x = 'First Letter',
+    x = 'First Letter in Name',
     y = '% Births'
   ) +
   
@@ -585,9 +585,9 @@ get_letter_type <- function(letter) {
 
 tbl_names_vowel_consonant <- tbl_names |> 
   # Add NEW column named `first_letter_type`
-  mutate(first_letter_type = get_letter_type(str_sub(name, 1, 1))) |>
+  mutate(first_letter_type = get_letter_type(first_letter)) |>
   # Add NEW column named `last_letter_type`
-  mutate(last_letter_type = get_letter_type(str_sub(name, -1, -1))) |>
+  mutate(last_letter_type = get_letter_type(last_letter)) |>
   # Group by `sex`, `year`, `first_letter_type` and `last_letter_type`
   group_by(sex,year,first_letter_type, last_letter_type) |>
   # Summarize the total number of births
@@ -599,25 +599,25 @@ tbl_names_vowel_consonant <- tbl_names |>
   # Ungroup the data
   ungroup() |>
   # Unite `first_letter_type` and `last_letter_type` into a NEW column named `first_last`
-  unite(first_last, first_letter_type, last_letter_type, sep="_")
+  unite(first_last, first_letter_type, last_letter_type, sep=" _ ")
 
 tbl_names_vowel_consonant
 ```
 
-    #> # A tibble: 568 × 5
-    #>    sex    year first_last          nb_births pct_births
-    #>    <chr> <dbl> <chr>                   <dbl>      <dbl>
-    #>  1 F      1880 consonant_consonant     66753      0.734
-    #>  2 F      1880 vowel_consonant         24241      0.266
-    #>  3 F      1881 consonant_consonant     67356      0.733
-    #>  4 F      1881 vowel_consonant         24597      0.267
-    #>  5 F      1882 consonant_consonant     79010      0.733
-    #>  6 F      1882 vowel_consonant         28837      0.267
-    #>  7 F      1883 consonant_consonant     81931      0.729
-    #>  8 F      1883 vowel_consonant         30388      0.271
-    #>  9 F      1884 consonant_consonant     94180      0.730
-    #> 10 F      1884 vowel_consonant         34839      0.270
-    #> # ℹ 558 more rows
+    #> # A tibble: 1,136 × 5
+    #>    sex    year first_last            nb_births pct_births
+    #>    <chr> <dbl> <chr>                     <dbl>      <dbl>
+    #>  1 F      1880 consonant _ consonant     19988     0.220 
+    #>  2 F      1880 consonant _ vowel         46765     0.514 
+    #>  3 F      1880 vowel _ consonant          5708     0.0627
+    #>  4 F      1880 vowel _ vowel             18533     0.204 
+    #>  5 F      1881 consonant _ consonant     20069     0.218 
+    #>  6 F      1881 consonant _ vowel         47287     0.514 
+    #>  7 F      1881 vowel _ consonant          5669     0.0617
+    #>  8 F      1881 vowel _ vowel             18928     0.206 
+    #>  9 F      1882 consonant _ consonant     23561     0.218 
+    #> 10 F      1882 consonant _ vowel         55449     0.514 
+    #> # ℹ 1,126 more rows
 
 #### Visualize
 
@@ -625,6 +625,43 @@ Now, you will create a visualization to display the trends in the usage
 of vowels and consonants in names over time. The visualization will show
 the percentage of births by the combination of first and last letter
 types, separately for each sex.
+
+``` r
+tbl_names_vowel_consonant |>
+  # Reorder `first_last` by the median `pct_births`
+  mutate(first_last = fct_reorder(first_last, pct_births, median)) |>
+  # Initialize a ggplot of `pct_births` vs. `year`
+  ggplot(aes(x = year, y = pct_births, fill=first_last)) +
+  # Add an area layer with fill = first_last
+  geom_area() +
+  # Facet wrap plot by `sex`
+  facet_wrap(~ sex, scales = "free_y") +
+  # Add labels (title, subtitle, caption, x, y)
+  labs(
+      title = "Trends in combinations between Consonants and Vowels",
+      subtitle = "between first and last letter",
+      caption = "Source: SSA",
+      x = "Year",
+      y = '% births'
+    ) +
+  # Clean up x and y axis scales
+  scale_x_continuous(
+    expand = c(0, 0)
+  ) +
+  scale_y_continuous(
+    expand = c(0, 0),
+    labels = scales::percent_format()
+  ) +
+  # Use Viridis colors for fill
+  scale_fill_viridis_d() +
+  # Update plotting theme
+  theme(
+    plot.title.position = 'plot',
+    legend.position = 'bottom'
+  )
+```
+
+<img src="img/question-5-visualize-1.png" width="100%" style="display: block; margin: auto;" />
 
 ------------------------------------------------------------------------
 
