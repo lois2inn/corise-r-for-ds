@@ -389,7 +389,7 @@ plot_estimated_age <- function(tbl, my_name, my_sex) {
     # Add labels (title, subtitle, x, y)
     labs(
       title = glue::glue('Age Distribution of American Girls Named {my_name}'),
-      subtitle = "___",
+      subtitle = "{my_name} is a popular girl name from 1950.",
       x = "Year",
       y = "# Births"
     ) +
@@ -418,7 +418,7 @@ plot_estimated_age <- function(tbl, my_name, my_sex) {
 }
 
 tbl_names_extended |> 
-  plot_estimated_age("Iris", "F")
+  plot_estimated_age("Anna", "F")
 ```
 
 <img src="img/plot-estimated-age-1.png" width="100%" style="display: block; margin: auto;" />
@@ -526,7 +526,7 @@ tbl_names_extended_age |>
   # Add labels (title, subtitle, x, y)
   labs(
     title = "Median ages for Females with the 25 most common names (2023)",
-    subtitle = "___",
+    subtitle = "Emily and Ashley are recently popular names for girls.",
     x = "Percentile",
     y = "Name"
   ) +
